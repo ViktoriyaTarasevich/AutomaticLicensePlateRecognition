@@ -11,7 +11,7 @@ namespace ALPR.BLL.PreprocessingTools.Filters
 {
     public class GrayscaleConverter
     {
-        public static Bitmap MakeGrayscale3(Bitmap original)
+        public  Bitmap MakeGrayscale3(Bitmap original)
         {
             
             Bitmap newBitmap = new Bitmap(original.Width, original.Height);

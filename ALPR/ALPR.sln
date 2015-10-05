@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPR.UI", "ALPR\ALPR.UI.csproj", "{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{22A29D11-F881-41E7-9797-22A50D21F4EA} = {22A29D11-F881-41E7-9797-22A50D21F4EA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPR.BLL", "ALPR.BLL\ALPR.BLL.csproj", "{22A29D11-F881-41E7-9797-22A50D21F4EA}"
 EndProject
