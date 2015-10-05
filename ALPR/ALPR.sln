@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPR", "ALPR\ALPR.csproj", "{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPR.UI", "ALPR\ALPR.UI.csproj", "{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALPR.BLL", "ALPR.BLL\ALPR.BLL.csproj", "{22A29D11-F881-41E7-9797-22A50D21F4EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F35B7124-C69C-456B-B2BB-13B64D5D2BB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22A29D11-F881-41E7-9797-22A50D21F4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22A29D11-F881-41E7-9797-22A50D21F4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22A29D11-F881-41E7-9797-22A50D21F4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22A29D11-F881-41E7-9797-22A50D21F4EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
