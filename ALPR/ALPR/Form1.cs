@@ -25,11 +25,11 @@ namespace ALPR
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void LoadPicture_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Select an image file.";
-            ofd.Filter = "Png Images(*.png)|*.png|Jpeg Images(*.jpg)|*.jpg";
+            ofd.Filter = "Jpeg Images(*.jpg)|*.jpg|Png Images(*.png)|*.png";
             ofd.Filter += "|Bitmap Images(*.bmp)|*.bmp";
 
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -45,7 +45,7 @@ namespace ALPR
             } 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void GrayScaleFilter_Click(object sender, EventArgs e)
         {
             var bitmap = pictureBox1.Image;
             var grayscale = new GrayscaleConverter();
@@ -54,7 +54,7 @@ namespace ALPR
             ResetPictureBoxes(new List<PictureBox>() { pictureBox3,pictureBox4 });
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void MedianFilter_Click(object sender, EventArgs e)
         {
             var bitmap = pictureBox2.Image;
             var medianFilter = new MedianFilter();
@@ -69,11 +69,11 @@ namespace ALPR
             label1.Text = trackBar1.Value.ToString();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Binarization_Click(object sender, EventArgs e)
         {
-            Bitmap temp = (Bitmap)pictureBox3.Image.Clone();
-            var otsu = new OtsuBinarization();
-            pictureBox4.Image = otsu.BitmapToBlackWhite2(temp);
+           Bitmap temp = (Bitmap)pictureBox3.Image.Clone();
+            var sb = new SimpleBinarization();
+            pictureBox4.Image = sb.BitmapToBlackWhite2(temp);
 
         }
 
@@ -88,5 +88,23 @@ namespace ALPR
                 }
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Bitmap temp = (Bitmap)pictureBox3.Image.Clone();
+
+            var ot = new OtsuThresholder();
+
+            var resultBytes = temp.BitmapToByteArray();
+            var newBmp = new byte[resultBytes.Length];
+            ot.DoThreshold(resultBytes, ref newBmp);
+
+
+
+
+            pictureBox4.Image = newBmp.ByteArrayToBitmap(temp.Width, temp.Height);
+        }
+
+        
     }
 }

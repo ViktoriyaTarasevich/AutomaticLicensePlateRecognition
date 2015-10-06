@@ -39,6 +39,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -54,7 +55,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Load Picture";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.LoadPicture_Click);
             // 
             // pictureBox1
             // 
@@ -88,7 +89,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "Grayscale";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.GrayScaleFilter_Click);
             // 
             // button3
             // 
@@ -98,28 +99,28 @@
             this.button3.TabIndex = 5;
             this.button3.Text = "Median Filter";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.MedianFilter_Click);
             // 
             // trackBar1
             // 
             this.trackBar1.Location = new System.Drawing.Point(606, 257);
-            this.trackBar1.Maximum = 15;
+            this.trackBar1.Maximum = 11;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(248, 45);
             this.trackBar1.TabIndex = 6;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar1.Value = 1;
+            this.trackBar1.Value = 3;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(714, 305);
+            this.label1.Location = new System.Drawing.Point(724, 305);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(13, 13);
             this.label1.TabIndex = 7;
-            this.label1.Text = "1";
+            this.label1.Text = "3";
             // 
             // pictureBox4
             // 
@@ -137,7 +138,7 @@
             this.button4.TabIndex = 9;
             this.button4.Text = "Binarization";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Binarization_Click);
             // 
             // label2
             // 
@@ -147,11 +148,23 @@
             this.label2.Size = new System.Drawing.Size(0, 13);
             this.label2.TabIndex = 10;
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(903, 242);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(248, 23);
+            this.button5.TabIndex = 11;
+            this.button5.Text = "Otsu Binarization";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1161, 371);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(1165, 371);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.pictureBox4);
@@ -164,7 +177,6 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -188,6 +200,7 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button5;
     }
 }
 

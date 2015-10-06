@@ -40,7 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PreprocessingTools\Binarization\OtsuBinarization.cs" />
+    <Compile Include="PreprocessingTools\Binarization\SimpleBinarization.cs" />
+    <Compile Include="PreprocessingTools\Binarization\OtsuThresholder.cs" />
     <Compile Include="PreprocessingTools\BitmapHelper.cs" />
     <Compile Include="PreprocessingTools\Filters\GrayscaleConverter.cs" />
     <Compile Include="PreprocessingTools\Filters\MedianFilter.cs" />

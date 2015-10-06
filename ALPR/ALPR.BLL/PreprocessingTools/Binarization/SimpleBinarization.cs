@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace ALPR.BLL.PreprocessingTools.Binarization
 {
-    public class OtsuBinarization
+    public class SimpleBinarization
     {
         public Bitmap BitmapToBlackWhite2(Bitmap src)
         {
-            // 1.
-            double treshold = 0.6;
+          
+            double treshold = 0.3;
 
-            // 2.
-            //int treshold = 150;
+          
 
             Bitmap dst = new Bitmap(src.Width, src.Height);
 
