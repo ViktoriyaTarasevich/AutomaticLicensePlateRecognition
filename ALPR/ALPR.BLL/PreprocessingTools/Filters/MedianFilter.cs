@@ -2,95 +2,97 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ALPR.BLL.PreprocessingTools.Filters
 {
     public class MedianFilter
     {
         public Bitmap Filter(Bitmap sourceBitmap,
-                                                 int matrixSize,
-                                                   int bias = 0,
-                                          bool grayscale = false)
+            int matrixSize,
+            int bias = 0,
+            bool grayscale = false)
         {
-            BitmapData sourceData =
-                       sourceBitmap.LockBits(new Rectangle(0, 0,
-                       sourceBitmap.Width, sourceBitmap.Height),
-                       ImageLockMode.ReadOnly,
-                       PixelFormat.Format32bppArgb);
+            var sourceData =
+                sourceBitmap.LockBits(new Rectangle(0, 0,
+                    sourceBitmap.Width, sourceBitmap.Height),
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format32bppArgb);
 
-            byte[] pixelBuffer = new byte[sourceData.Stride *
-                                          sourceData.Height];
+            var pixelBuffer = new byte[sourceData.Stride*
+                                       sourceData.Height];
 
-            byte[] resultBuffer = new byte[sourceData.Stride *
-                                           sourceData.Height];
+            var resultBuffer = new byte[sourceData.Stride*
+                                        sourceData.Height];
 
             Marshal.Copy(sourceData.Scan0, pixelBuffer, 0,
-                                       pixelBuffer.Length);
+                pixelBuffer.Length);
 
             sourceBitmap.UnlockBits(sourceData);
 
-            if (grayscale == true)
+            if (grayscale)
             {
                 float rgb = 0;
 
-                for (int k = 0; k < pixelBuffer.Length; k += 4)
+                for (var k = 0; k < pixelBuffer.Length; k += 4)
                 {
-                    rgb = pixelBuffer[k] * 0.11f;
-                    rgb += pixelBuffer[k + 1] * 0.59f;
-                    rgb += pixelBuffer[k + 2] * 0.3f;
+                    rgb = pixelBuffer[k]*0.11f;
+                    rgb += pixelBuffer[k + 1]*0.59f;
+                    rgb += pixelBuffer[k + 2]*0.3f;
 
 
-                    pixelBuffer[k] = (byte)rgb;
+                    pixelBuffer[k] = (byte) rgb;
                     pixelBuffer[k + 1] = pixelBuffer[k];
                     pixelBuffer[k + 2] = pixelBuffer[k];
                     pixelBuffer[k + 3] = 255;
                 }
             }
 
-            int filterOffset = (matrixSize - 1) / 2;
-            int calcOffset = 0;
+            var filterOffset = (matrixSize - 1)/2;
+            var calcOffset = 0;
 
-            int byteOffset = 0;
+            var byteOffset = 0;
 
-            List<int> neighbourPixels = new List<int>();
+            var neighbourPixels = new List<int>();
             byte[] middlePixel;
 
-            for (int offsetY = filterOffset; offsetY <
-                sourceBitmap.Height - filterOffset; offsetY++)
+            for (var offsetY = filterOffset;
+                offsetY <
+                sourceBitmap.Height - filterOffset;
+                offsetY++)
             {
-                for (int offsetX = filterOffset; offsetX <
-                    sourceBitmap.Width - filterOffset; offsetX++)
+                for (var offsetX = filterOffset;
+                    offsetX <
+                    sourceBitmap.Width - filterOffset;
+                    offsetX++)
                 {
-                    byteOffset = offsetY *
+                    byteOffset = offsetY*
                                  sourceData.Stride +
-                                 offsetX * 4;
+                                 offsetX*4;
 
                     neighbourPixels.Clear();
 
-                    for (int filterY = -filterOffset;
-                        filterY <= filterOffset; filterY++)
+                    for (var filterY = -filterOffset;
+                        filterY <= filterOffset;
+                        filterY++)
                     {
-                        for (int filterX = -filterOffset;
-                            filterX <= filterOffset; filterX++)
+                        for (var filterX = -filterOffset;
+                            filterX <= filterOffset;
+                            filterX++)
                         {
-
                             calcOffset = byteOffset +
-                                         (filterX * 4) +
-                                         (filterY * sourceData.Stride);
+                                         (filterX*4) +
+                                         (filterY*sourceData.Stride);
 
                             neighbourPixels.Add(BitConverter.ToInt32(
-                                             pixelBuffer, calcOffset));
+                                pixelBuffer, calcOffset));
                         }
                     }
 
                     neighbourPixels.Sort();
 
                     middlePixel = BitConverter.GetBytes(
-                                       neighbourPixels[filterOffset]);
+                        neighbourPixels[filterOffset]);
 
                     resultBuffer[byteOffset] = middlePixel[0];
                     resultBuffer[byteOffset + 1] = middlePixel[1];
@@ -99,17 +101,17 @@ namespace ALPR.BLL.PreprocessingTools.Filters
                 }
             }
 
-            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width,
-                                             sourceBitmap.Height);
+            var resultBitmap = new Bitmap(sourceBitmap.Width,
+                sourceBitmap.Height);
 
-            BitmapData resultData =
-                       resultBitmap.LockBits(new Rectangle(0, 0,
-                       resultBitmap.Width, resultBitmap.Height),
-                       ImageLockMode.WriteOnly,
-                       PixelFormat.Format32bppArgb);
+            var resultData =
+                resultBitmap.LockBits(new Rectangle(0, 0,
+                    resultBitmap.Width, resultBitmap.Height),
+                    ImageLockMode.WriteOnly,
+                    PixelFormat.Format32bppArgb);
 
             Marshal.Copy(resultBuffer, 0, resultData.Scan0,
-                                       resultBuffer.Length);
+                resultBuffer.Length);
 
             resultBitmap.UnlockBits(resultData);
 
