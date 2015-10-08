@@ -43,6 +43,7 @@
     <Compile Include="PreprocessingTools\Binarization\SimpleBinarization.cs" />
     <Compile Include="PreprocessingTools\Binarization\OtsuThresholder.cs" />
     <Compile Include="PreprocessingTools\BitmapHelper.cs" />
+    <Compile Include="PreprocessingTools\Filters\GaussFilter.cs" />
     <Compile Include="PreprocessingTools\Filters\GrayscaleConverter.cs" />
     <Compile Include="PreprocessingTools\Filters\MedianFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
