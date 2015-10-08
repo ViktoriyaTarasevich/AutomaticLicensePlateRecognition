@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ALPR.BLL.PreprocessingTools;
 using ALPR.BLL.PreprocessingTools.Binarization;
@@ -32,26 +25,26 @@ namespace ALPR
             ofd.Filter = "Jpeg Images(*.jpg)|*.jpg|Png Images(*.png)|*.png";
             ofd.Filter += "|Bitmap Images(*.bmp)|*.bmp";
 
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 StreamReader streamReader = new StreamReader(ofd.FileName);
-                var originalBitmap = (Bitmap)Bitmap.FromStream(streamReader.BaseStream);
+                var originalBitmap = (Bitmap) Bitmap.FromStream(streamReader.BaseStream);
                 streamReader.Close();
                 var previewBitmap = originalBitmap.CopyToSquareCanvas(WINDOW_WIDTH);
 
 
                 pictureBox1.Image = previewBitmap;
-                ResetPictureBoxes(new List<PictureBox>() {pictureBox2,pictureBox3, pictureBox4 });
-            } 
+                ResetPictureBoxes(new List<PictureBox>() {pictureBox2, pictureBox3, pictureBox4});
+            }
         }
 
         private void GrayScaleFilter_Click(object sender, EventArgs e)
         {
             var bitmap = pictureBox1.Image;
             var grayscale = new GrayscaleConverter();
-            
-            pictureBox2.Image = grayscale.MakeGrayscale3((Bitmap)bitmap);
-            ResetPictureBoxes(new List<PictureBox>() { pictureBox3,pictureBox4 });
+
+            pictureBox2.Image = grayscale.MakeGrayscale3((Bitmap) bitmap);
+            ResetPictureBoxes(new List<PictureBox>() {pictureBox3, pictureBox4});
         }
 
         private void MedianFilter_Click(object sender, EventArgs e)
@@ -59,9 +52,8 @@ namespace ALPR
             var bitmap = pictureBox2.Image;
             var medianFilter = new MedianFilter();
 
-            pictureBox3.Image = medianFilter.Filter((Bitmap)bitmap, trackBar1.Value);
-            ResetPictureBoxes(new List<PictureBox>() { pictureBox4});
-            
+            pictureBox3.Image = medianFilter.Filter((Bitmap) bitmap, trackBar1.Value);
+            ResetPictureBoxes(new List<PictureBox>() {pictureBox4});
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -71,10 +63,9 @@ namespace ALPR
 
         private void Binarization_Click(object sender, EventArgs e)
         {
-           Bitmap temp = (Bitmap)pictureBox3.Image.Clone();
+            Bitmap temp = (Bitmap) pictureBox3.Image.Clone();
             var sb = new SimpleBinarization();
             pictureBox4.Image = sb.BitmapToBlackWhite2(temp);
-
         }
 
         private void ResetPictureBoxes(IEnumerable<PictureBox> pictureBoxes)
@@ -91,7 +82,7 @@ namespace ALPR
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Bitmap temp = (Bitmap)pictureBox3.Image.Clone();
+            Bitmap temp = (Bitmap) pictureBox3.Image.Clone();
 
             var ot = new OtsuThresholder();
 
@@ -100,11 +91,7 @@ namespace ALPR
             ot.DoThreshold(resultBytes, ref newBmp);
 
 
-
-
             pictureBox4.Image = newBmp.ByteArrayToBitmap(temp.Width, temp.Height);
         }
-
-        
     }
 }
