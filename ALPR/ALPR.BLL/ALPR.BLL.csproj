@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +44,7 @@
     <Compile Include="PreprocessingTools\Binarization\SimpleBinarization.cs" />
     <Compile Include="PreprocessingTools\Binarization\OtsuThresholder.cs" />
     <Compile Include="PreprocessingTools\BitmapHelper.cs" />
+    <Compile Include="PreprocessingTools\EdgeDetection\EdgeDetectionDifference.cs" />
     <Compile Include="PreprocessingTools\Filters\GaussFilter.cs" />
     <Compile Include="PreprocessingTools\Filters\GrayscaleConverter.cs" />
     <Compile Include="PreprocessingTools\Filters\MedianFilter.cs" />

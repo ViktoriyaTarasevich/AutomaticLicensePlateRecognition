@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using ALPR.BLL.PreprocessingTools;
 using ALPR.BLL.PreprocessingTools.Binarization;
+using ALPR.BLL.PreprocessingTools.EdgeDetection;
 using ALPR.BLL.PreprocessingTools.Filters;
 
 namespace ALPR
@@ -34,26 +35,29 @@ namespace ALPR
 
 
                 pictureBox1.Image = previewBitmap;
-                ResetPictureBoxes(new List<PictureBox>() {pictureBox2, pictureBox3, pictureBox4});
+                groupBox1.Visible = true;
+                groupBox2.Visible = true;
             }
         }
 
         private void GrayScaleFilter_Click(object sender, EventArgs e)
         {
-            var bitmap = pictureBox1.Image;
+
+
+            var bitmap = GetPictureBox().Image;
             var grayscale = new GrayscaleConverter();
 
-            pictureBox2.Image = grayscale.MakeGrayscale3((Bitmap) bitmap);
-            ResetPictureBoxes(new List<PictureBox>() {pictureBox3, pictureBox4});
+            pictureBox5.Image = grayscale.MakeGrayscale3((Bitmap) bitmap);
+           
         }
 
         private void MedianFilter_Click(object sender, EventArgs e)
         {
-            var bitmap = pictureBox2.Image;
+            var bitmap = GetPictureBox().Image;
             var medianFilter = new MedianFilter();
 
-            pictureBox3.Image = medianFilter.Filter((Bitmap) bitmap, trackBar1.Value);
-            ResetPictureBoxes(new List<PictureBox>() {pictureBox4});
+            pictureBox5.Image = medianFilter.Filter((Bitmap) bitmap, trackBar1.Value);
+           
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -63,26 +67,16 @@ namespace ALPR
 
         private void Binarization_Click(object sender, EventArgs e)
         {
-            Bitmap temp = (Bitmap) pictureBox3.Image.Clone();
+            Bitmap temp = (Bitmap)GetPictureBox().Image.Clone();
             var sb = new SimpleBinarization();
-            pictureBox4.Image = sb.BitmapToBlackWhite2(temp);
+            pictureBox5.Image = sb.BitmapToBlackWhite2(temp);
         }
 
-        private void ResetPictureBoxes(IEnumerable<PictureBox> pictureBoxes)
-        {
-            foreach (var pb in pictureBoxes)
-            {
-                if (pb.Image != null)
-                {
-                    pb.Image.Dispose();
-                    pb.Image = null;
-                }
-            }
-        }
+        
 
-        private void button5_Click(object sender, EventArgs e)
+        private void OtsuBinarization_Click(object sender, EventArgs e)
         {
-            Bitmap temp = (Bitmap) pictureBox3.Image.Clone();
+            Bitmap temp = (Bitmap)GetPictureBox().Image.Clone();
 
             var ot = new OtsuThresholder();
 
@@ -91,7 +85,43 @@ namespace ALPR
             ot.DoThreshold(resultBytes, ref newBmp);
 
 
-            pictureBox4.Image = newBmp.ByteArrayToBitmap(temp.Width, temp.Height);
+            pictureBox5.Image = newBmp.ByteArrayToBitmap(temp.Width, temp.Height);
+        }
+
+        private PictureBox GetPictureBox()
+        {
+            if (pictureBox5.Image == null)
+                return pictureBox1;
+            return pictureBox5;
+        }
+
+        private void ResetPicture_Click(object sender, EventArgs e)
+        {
+            pictureBox5.Image = pictureBox1.Image;
+        }
+
+        private void GaussFilter_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetPictureBox().Image;
+            var gaussFilter = new GaussFilter();
+
+            pictureBox5.Image = gaussFilter.FilterProcessImage( trackBar2.Value,(Bitmap)bitmap);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            label3.Text = trackBar2.Value.ToString();
+        }
+
+        private void EdgeDetection_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetPictureBox().Image;
+            pictureBox5.Image = EdgeDetectionDifference.EdgeDetectDifference((Bitmap) bitmap, (byte) trackBar3.Value);
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
