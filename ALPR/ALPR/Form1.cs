@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using AForge;
+using AForge.Imaging;
+using AForge.Imaging.Filters;
+using AForge.Math.Geometry;
 using ALPR.BLL.PreprocessingTools;
 using ALPR.BLL.PreprocessingTools.Binarization;
 using ALPR.BLL.PreprocessingTools.EdgeDetection;
 using ALPR.BLL.PreprocessingTools.Filters;
+using Point = System.Drawing.Point;
 
 namespace ALPR
 {
@@ -122,6 +129,109 @@ namespace ALPR
         private void groupBox2_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void ProcessImage(Bitmap bitmap)
+        {
+            // lock image
+            BitmapData bitmapData = bitmap.LockBits(
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // step 1 - turn background to black
+            ColorFiltering colorFilter = new ColorFiltering();
+
+            colorFilter.Red = new IntRange(0, 64);
+            colorFilter.Green = new IntRange(0, 64);
+            colorFilter.Blue = new IntRange(0, 64);
+            colorFilter.FillOutsideRange = false;
+
+            colorFilter.ApplyInPlace(bitmapData);
+
+            // step 2 - locating objects
+            BlobCounter blobCounter = new BlobCounter();
+
+            blobCounter.FilterBlobs = true;
+            blobCounter.MinHeight = 5;
+            blobCounter.MinWidth = 5;
+
+            blobCounter.ProcessImage(bitmapData);
+            Blob[] blobs = blobCounter.GetObjectsInformation();
+            bitmap.UnlockBits(bitmapData);
+
+   
+            SimpleShapeChecker shapeChecker = new SimpleShapeChecker();
+
+            Graphics g = Graphics.FromImage(bitmap);
+           
+
+            Pen brownPen = new Pen(Color.Red, 3); 
+
+
+            for (int i = 0, n = blobs.Length; i < n; i++)
+            {
+                List<IntPoint> edgePoints = blobCounter.GetBlobsEdgePoints(blobs[i]);
+
+
+                List<IntPoint> corners;
+
+             
+                if (shapeChecker.IsConvexPolygon(edgePoints, out corners))
+                {
+                    
+                    PolygonSubType subType = shapeChecker.CheckPolygonSubType(corners);
+
+                    
+                    if (subType == PolygonSubType.Unknown)
+                    {
+                        if (corners.Count == 4)
+                        {
+                            g.DrawPolygon(brownPen, ToPointsArray(corners));
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (corners.Count == 4)
+                        {
+                            g.DrawPolygon(brownPen, ToPointsArray(corners));
+                        }
+                    }
+
+                    
+                }
+            }
+
+            brownPen.Dispose();
+            g.Dispose();
+
+           
+            Clipboard.SetDataObject(bitmap);
+           
+            pictureBox5.Image = bitmap;
+
+           
+        }
+
+        
+
+       
+        private Point[] ToPointsArray(List<IntPoint> points)
+        {
+            Point[] array = new Point[points.Count];
+
+            for (int i = 0, n = points.Count; i < n; i++)
+            {
+                array[i] = new Point(points[i].X, points[i].Y);
+            }
+
+            return array;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var bitmap = GetPictureBox().Image.Clone();
+            ProcessImage((Bitmap)bitmap);
         }
     }
 }
